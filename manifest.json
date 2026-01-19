@@ -1,0 +1,10 @@
+{
+	"id": "alex-sherman-plugin",
+	"name": "Alex Sherman Plugin",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Alex's custom plugin.",
+	"author": "alex-sherman",
+	"authorUrl": "https://asherman.io",
+	"isDesktopOnly": false
+}
