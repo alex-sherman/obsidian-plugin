@@ -1,5 +1,5 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
-import MyPlugin from "./main";
+import {  PluginSettingTab, Setting } from "obsidian";
+import AlexShermanPlugin from "./main";
 
 export interface MyPluginSettings {
   paths: { [key: string]: string };
@@ -10,10 +10,10 @@ export const DEFAULT_SETTINGS: MyPluginSettings = {
 };
 
 export class SampleSettingTab extends PluginSettingTab {
-  plugin: MyPlugin;
+  plugin: AlexShermanPlugin;
 
-  constructor(app: App, plugin: MyPlugin) {
-    super(app, plugin);
+  constructor(plugin: AlexShermanPlugin) {
+    super(plugin.app, plugin);
     this.plugin = plugin;
   }
 

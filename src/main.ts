@@ -1,5 +1,6 @@
-import { FileView, Plugin } from "obsidian";
+import { FileView, Notice, Plugin } from "obsidian";
 import { DEFAULT_SETTINGS, MyPluginSettings, SampleSettingTab } from "settings";
+import { SampleModal } from "modal";
 
 const template = `
 .tree-item-self[data-path^="#{$path}"] {
@@ -38,8 +39,26 @@ export default class AlexShermanPlugin extends Plugin {
   settings: MyPluginSettings;
   async onload() {
     await this.loadSettings();
-    this.addSettingTab(new SampleSettingTab(this.app, this));
+    this.addSettingTab(new SampleSettingTab(this));
     this.applyStyles();
+
+    this.registerEvent(
+      this.app.workspace.on("file-menu", (menu, file) => {
+        // Add a new item to the menu
+        menu.addItem((item) => {
+          item
+            .setTitle("Set color") // Set the text of the menu item
+            .setIcon("palette") // Set an icon (uses Lucide icons)
+            .onClick(async () => {
+              const modal = new SampleModal(this, file.path);
+              modal.open();
+            });
+        });
+      }),
+    );
+  }
+  onunload() {
+    document.getElementById("custom-color")?.remove();
   }
 
   applyStyles() {
@@ -47,7 +66,9 @@ export default class AlexShermanPlugin extends Plugin {
     document.getElementById("custom-color")?.remove();
     style.id = "custom-color";
 
-    for (const [path, color] of Object.entries(this.settings.paths)) {
+    for (const [path, color] of Object.entries(this.settings.paths).sort(
+      (a, b) => a[0].length - b[0].length,
+    )) {
       style.innerHTML += template
         .replace(/\#\{\$color\}/g, color)
         .replace(/\#{\$path\}/g, path);
